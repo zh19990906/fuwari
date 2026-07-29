@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noEmit": false,
+    "outDir": "../.test-dist",
+    "rootDir": "..",
+    "declaration": false
+  },
+  "include": ["../src/i18n/ui-language-core.ts"]
+}
