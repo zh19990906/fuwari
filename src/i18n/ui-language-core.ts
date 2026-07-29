@@ -96,7 +96,10 @@ function updateAttributeNodes(
 	}
 }
 
-function updateLanguageOptions(root: LocalizableRoot, language: UiLanguage): void {
+function updateLanguageOptions(
+	root: LocalizableRoot,
+	language: UiLanguage,
+): void {
 	for (const element of root.querySelectorAll("[data-ui-language-option]")) {
 		const active = element.dataset.uiLanguageOption === language;
 		const value = String(active);
