@@ -3,12 +3,12 @@ import type I18nKey from "../../i18n/i18nKey";
 import { zh_CN } from "../../i18n/languages/zh_CN";
 
 interface Props {
-	key: I18nKey;
+	i18nKey: I18nKey;
 	class?: string;
 }
 
-const { key } = Astro.props;
+const { i18nKey } = Astro.props;
 const className = Astro.props.class;
 ---
 
-<span class={className} data-i18n-key={key}>{zh_CN[key]}</span>
+<span class={className} data-i18n-key={i18nKey}>{zh_CN[i18nKey]}</span>
