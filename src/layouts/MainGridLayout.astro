@@ -2,7 +2,9 @@
 import BackToTop from "@components/control/BackToTop.astro";
 import Footer from "@components/Footer.astro";
 import Navbar from "@components/Navbar.astro";
+import UiLanguageHead from "@components/UiLanguageHead.astro";
 import SideBar from "@components/widget/SideBar.astro";
+import type I18nKey from "@i18n/i18nKey";
 import type { MarkdownHeading } from "astro";
 import { Icon } from "astro-icon/components";
 import ImageWrapper from "../components/misc/ImageWrapper.astro";
@@ -17,6 +19,7 @@ import Layout from "./Layout.astro";
 
 interface Props {
 	title?: string;
+	titleKey?: I18nKey;
 	banner?: string;
 	description?: string;
 	lang?: string;
@@ -26,6 +29,7 @@ interface Props {
 
 const {
 	title,
+	titleKey,
 	banner,
 	description,
 	lang,
@@ -43,6 +47,7 @@ const mainPanelTop = siteConfig.banner.enable
 
 <Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
 
+<UiLanguageHead slot="head" titleKey={titleKey} />
 <!-- Navbar -->
 <slot slot="head" name="head"></slot>
 <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 md:px-4 mx-auto" class:list={[""]}>
@@ -84,6 +89,11 @@ const mainPanelTop = siteConfig.banner.enable
 
             <main id="swup-container" class="transition-swup-fade col-span-2 lg:col-span-1 overflow-hidden">
                 <div id="content-wrapper" class="onload-animation">
+                    <span
+                        hidden
+                        data-ui-document-title-key={titleKey ?? ""}
+                        data-ui-document-title-suffix={siteConfig.title}
+                    ></span>
                     <!-- the overflow-hidden here prevent long text break the layout-->
                     <!-- make id different from windows.swup global property -->
                     <slot></slot>
