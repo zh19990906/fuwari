@@ -11,8 +11,12 @@ import {
 	type UiTranslationTable,
 	writeStoredUiLanguage,
 } from "./ui-language-core";
+import { uiLanguageLabels } from "./ui-language-labels";
 
-const translations: UiTranslationTable = { en, zh_CN };
+const translations: UiTranslationTable = {
+	en: { ...en, ...uiLanguageLabels.en },
+	zh_CN: { ...zh_CN, ...uiLanguageLabels.zh_CN },
+};
 const HTML_LANG: Record<UiLanguage, string> = {
 	zh_CN: "zh-CN",
 	en: "en",
