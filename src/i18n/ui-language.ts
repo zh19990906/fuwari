@@ -3,10 +3,10 @@ import { zh_CN } from "./languages/zh_CN";
 import {
 	applyTranslationToRoot,
 	DEFAULT_UI_LANGUAGE,
+	type LocalizableRoot,
 	normalizeUiLanguage,
 	readStoredUiLanguage,
 	translateKey,
-	type LocalizableRoot,
 	type UiLanguage,
 	type UiTranslationTable,
 	writeStoredUiLanguage,
@@ -54,9 +54,7 @@ function updateDocumentTitle(language: UiLanguage): void {
 	const suffix =
 		marker?.dataset.uiDocumentTitleSuffix ??
 		document.documentElement.dataset.uiTitleSuffix;
-	document.title = suffix
-		? `${translatedTitle} - ${suffix}`
-		: translatedTitle;
+	document.title = suffix ? `${translatedTitle} - ${suffix}` : translatedTitle;
 }
 
 function applyUiLanguage(language: UiLanguage): void {
