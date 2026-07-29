@@ -1,0 +1,45 @@
+---
+import { UiLabelKey, uiLanguageLabels } from "../i18n/ui-language-labels";
+---
+
+<div
+	class="mx-1 flex h-9 items-center rounded-lg bg-black/[0.04] px-1 text-xs font-bold dark:bg-white/5"
+	role="group"
+	aria-label={uiLanguageLabels.zh_CN[UiLabelKey.language]}
+	data-i18n-aria-label={UiLabelKey.language}
+>
+	<button
+		type="button"
+		class="language-option rounded-md px-2 py-1 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
+		data-ui-language-option="zh_CN"
+		data-active="true"
+		aria-pressed="true"
+		aria-label={uiLanguageLabels.zh_CN[UiLabelKey.switchToChinese]}
+		data-i18n-aria-label={UiLabelKey.switchToChinese}
+	>
+		中
+	</button>
+	<span class="text-black/20 dark:text-white/20" aria-hidden="true">/</span>
+	<button
+		type="button"
+		class="language-option rounded-md px-2 py-1 transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--primary)]"
+		data-ui-language-option="en"
+		data-active="false"
+		aria-pressed="false"
+		aria-label={uiLanguageLabels.zh_CN[UiLabelKey.switchToEnglish]}
+		data-i18n-aria-label={UiLabelKey.switchToEnglish}
+	>
+		EN
+	</button>
+</div>
+
+<style>
+	.language-option {
+		color: color-mix(in oklch, currentColor 50%, transparent);
+	}
+	.language-option:hover,
+	.language-option[data-active="true"] {
+		color: var(--primary);
+		background: var(--btn-plain-bg-hover);
+	}
+</style>

@@ -1,0 +1,55 @@
+---
+import { siteConfig } from "../config";
+import type I18nKey from "../i18n/i18nKey";
+import { en } from "../i18n/languages/en";
+import { zh_CN } from "../i18n/languages/zh_CN";
+import { UI_LANGUAGE_STORAGE_KEY } from "../i18n/ui-language-core";
+
+interface Props {
+	titleKey?: I18nKey;
+}
+
+const { titleKey } = Astro.props;
+const titleKeyValue = titleKey ?? "";
+const titleTranslations = titleKey
+	? { en: en[titleKey], zh_CN: zh_CN[titleKey] }
+	: { en: "", zh_CN: "" };
+const siteTitle = siteConfig.title;
+---
+
+<script
+	is:inline
+	define:vars={{
+		storageKey: UI_LANGUAGE_STORAGE_KEY,
+		titleKeyValue,
+		titleTranslations,
+		siteTitle,
+	}}
+>
+	(() => {
+		let language = "zh_CN";
+		try {
+			const stored = localStorage.getItem(storageKey);
+			if (stored === "en" || stored === "zh_CN") language = stored;
+		} catch {
+			language = "zh_CN";
+		}
+
+		const html = document.documentElement;
+		html.dataset.uiLanguage = language;
+		html.lang = language === "en" ? "en" : "zh-CN";
+		if (titleKeyValue) {
+			html.dataset.uiTitleKey = titleKeyValue;
+			html.dataset.uiTitleSuffix = siteTitle;
+			const translated = titleTranslations[language];
+			if (translated) document.title = `${translated} - ${siteTitle}`;
+		}
+		if (language === "en") html.classList.add("ui-language-pending");
+	})();
+</script>
+
+<style is:global>
+	html.ui-language-pending [data-i18n-key] {
+		visibility: hidden;
+	}
+</style>

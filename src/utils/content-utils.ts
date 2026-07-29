@@ -38,7 +38,6 @@ export type PostForList = {
 export async function getSortedPostsList(): Promise<PostForList[]> {
 	const sortedFullPosts = await getRawSortedPosts();
 
-	// delete post.body
 	const sortedPostsList = sortedFullPosts.map((post) => ({
 		slug: post.slug,
 		data: post.data,
@@ -55,7 +54,6 @@ export async function getTagList(): Promise<Tag[]> {
 	const allBlogPosts = await getCollection<"posts">("posts", ({ data }) => {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
-
 	const countMap: { [key: string]: number } = {};
 	allBlogPosts.forEach((post: { data: { tags: string[] } }) => {
 		post.data.tags.forEach((tag: string) => {
@@ -64,7 +62,6 @@ export async function getTagList(): Promise<Tag[]> {
 		});
 	});
 
-	// sort tags
 	const keys: string[] = Object.keys(countMap).sort((a, b) => {
 		return a.toLowerCase().localeCompare(b.toLowerCase());
 	});
@@ -76,6 +73,7 @@ export type Category = {
 	name: string;
 	count: number;
 	url: string;
+	i18nKey?: I18nKey;
 };
 
 export async function getCategoryList(): Promise<Category[]> {
@@ -83,10 +81,10 @@ export async function getCategoryList(): Promise<Category[]> {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
 	const count: { [key: string]: number } = {};
+	let uncategorizedCount = 0;
 	allBlogPosts.forEach((post: { data: { category: string | null } }) => {
 		if (!post.data.category) {
-			const ucKey = i18n(I18nKey.uncategorized);
-			count[ucKey] = count[ucKey] ? count[ucKey] + 1 : 1;
+			uncategorizedCount++;
 			return;
 		}
 
@@ -98,17 +96,22 @@ export async function getCategoryList(): Promise<Category[]> {
 		count[categoryName] = count[categoryName] ? count[categoryName] + 1 : 1;
 	});
 
-	const lst = Object.keys(count).sort((a, b) => {
-		return a.toLowerCase().localeCompare(b.toLowerCase());
-	});
+	const ret: Category[] = Object.keys(count).map((name) => ({
+		name,
+		count: count[name],
+		url: getCategoryUrl(name),
+	}));
 
-	const ret: Category[] = [];
-	for (const c of lst) {
+	if (uncategorizedCount > 0) {
 		ret.push({
-			name: c,
-			count: count[c],
-			url: getCategoryUrl(c),
+			name: i18n(I18nKey.uncategorized),
+			count: uncategorizedCount,
+			url: getCategoryUrl(null),
+			i18nKey: I18nKey.uncategorized,
 		});
 	}
-	return ret;
+
+	return ret.sort((a, b) =>
+		a.name.toLowerCase().localeCompare(b.name.toLowerCase()),
+	);
 }
