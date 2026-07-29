@@ -2,8 +2,10 @@
 import { Icon } from "astro-icon/components";
 import { navBarConfig, siteConfig } from "../config";
 import { LinkPresets } from "../constants/link-presets";
+import { UiLabelKey, uiLanguageLabels } from "../i18n/ui-language-labels";
 import { LinkPreset, type NavBarLink } from "../types/config";
 import { url } from "../utils/url-utils";
+import LanguageSwitch from "./LanguageSwitch.astro";
 import LightDarkSwitch from "./LightDarkSwitch.svelte";
 import Search from "./Search.svelte";
 import DisplaySettings from "./widget/DisplaySettings.svelte";
@@ -33,26 +35,38 @@ let links: NavBarLink[] = navBarConfig.links.map(
         </a>
         <div class="hidden md:flex">
             {links.map((l) => {
-                return <a aria-label={l.name} href={l.external ? l.url : url(l.url)} target={l.external ? "_blank" : null}
+                return <a aria-label={l.name} data-i18n-aria-label={l.i18nKey} href={l.external ? l.url : url(l.url)} target={l.external ? "_blank" : null}
                           class="btn-plain scale-animation rounded-lg h-11 font-bold px-5 active:scale-95"
                 >
-                    <div class="flex items-center">
+                    <div class="flex items-center" data-i18n-key={l.i18nKey}>
                         {l.name}
                         {l.external && <Icon name="fa6-solid:arrow-up-right-from-square" class="text-[0.875rem] transition -translate-y-[1px] ml-1 text-black/[0.2] dark:text-white/[0.2]"></Icon>}
                     </div>
                 </a>;
             })}
         </div>
-        <div class="flex">
+        <div class="flex items-center">
             <!--<SearchPanel client:load>-->
             <Search client:only="svelte"></Search>
+            <LanguageSwitch />
             {!siteConfig.themeColor.fixed && (
-                    <button aria-label="Display Settings" class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90" id="display-settings-switch">
+                    <button
+                        aria-label={uiLanguageLabels.zh_CN[UiLabelKey.displaySettings]}
+                        data-i18n-aria-label={UiLabelKey.displaySettings}
+                        class="btn-plain scale-animation rounded-lg h-11 w-11 active:scale-90"
+                        id="display-settings-switch"
+                    >
                         <Icon name="material-symbols:palette-outline" class="text-[1.25rem]"></Icon>
                     </button>
             )}
             <LightDarkSwitch client:only="svelte"></LightDarkSwitch>
-            <button aria-label="Menu" name="Nav Menu" class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 md:!hidden" id="nav-menu-switch">
+            <button
+                aria-label={uiLanguageLabels.zh_CN[UiLabelKey.navigationMenu]}
+                data-i18n-aria-label={UiLabelKey.navigationMenu}
+                name="Nav Menu"
+                class="btn-plain scale-animation rounded-lg w-11 h-11 active:scale-90 md:!hidden"
+                id="nav-menu-switch"
+            >
                 <Icon name="material-symbols:menu-rounded" class="text-[1.25rem]"></Icon>
             </button>
         </div>
