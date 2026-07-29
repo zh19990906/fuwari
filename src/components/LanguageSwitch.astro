@@ -1,13 +1,12 @@
 ---
-import I18nKey from "../i18n/i18nKey";
-import { zh_CN } from "../i18n/languages/zh_CN";
+import { UiLabelKey, uiLanguageLabels } from "../i18n/ui-language-labels";
 ---
 
 <div
 	class="mx-1 flex h-9 items-center rounded-lg bg-black/[0.04] px-1 text-xs font-bold dark:bg-white/5"
 	role="group"
-	aria-label={zh_CN[I18nKey.language]}
-	data-i18n-aria-label={I18nKey.language}
+	aria-label={uiLanguageLabels.zh_CN[UiLabelKey.language]}
+	data-i18n-aria-label={UiLabelKey.language}
 >
 	<button
 		type="button"
@@ -15,8 +14,8 @@ import { zh_CN } from "../i18n/languages/zh_CN";
 		data-ui-language-option="zh_CN"
 		data-active="true"
 		aria-pressed="true"
-		aria-label={zh_CN[I18nKey.switchToChinese]}
-		data-i18n-aria-label={I18nKey.switchToChinese}
+		aria-label={uiLanguageLabels.zh_CN[UiLabelKey.switchToChinese]}
+		data-i18n-aria-label={UiLabelKey.switchToChinese}
 	>
 		中
 	</button>
@@ -27,8 +26,8 @@ import { zh_CN } from "../i18n/languages/zh_CN";
 		data-ui-language-option="en"
 		data-active="false"
 		aria-pressed="false"
-		aria-label={zh_CN[I18nKey.switchToEnglish]}
-		data-i18n-aria-label={I18nKey.switchToEnglish}
+		aria-label={uiLanguageLabels.zh_CN[UiLabelKey.switchToEnglish]}
+		data-i18n-aria-label={UiLabelKey.switchToEnglish}
 	>
 		EN
 	</button>
