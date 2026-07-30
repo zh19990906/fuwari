@@ -43,6 +43,9 @@ jobs:
       - name: Run documentation tests
         run: pnpm test:docs
 
+      - name: Run content migration safety tests
+        run: pnpm test:content-migration
+
       - name: Run Astro Check
         run: pnpm astro check
 
