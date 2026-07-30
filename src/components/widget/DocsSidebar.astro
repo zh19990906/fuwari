@@ -1,0 +1,56 @@
+---
+import { Icon } from "astro-icon/components";
+import {
+	UiLabelKey,
+	uiLanguageLabels,
+} from "../../i18n/ui-language-labels";
+import type { DocsArticleContext } from "../../utils/docs-utils";
+import {
+	getDocsGroupUrl,
+	getDocsUrl,
+	getPostUrlBySlug,
+} from "../../utils/url-utils";
+
+interface Props {
+	context: DocsArticleContext;
+	class?: string;
+}
+
+const { context, class: className } = Astro.props;
+---
+
+<div class:list={["card-base px-4 py-4", className]}>
+    <a href={getDocsUrl()} class="btn-plain flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-50">
+        <Icon name="material-symbols:arrow-back-rounded" class="text-lg" />
+        <span data-i18n-key={UiLabelKey.backToDocs}>{uiLanguageLabels.zh_CN[UiLabelKey.backToDocs]}</span>
+    </a>
+    <a href={getDocsGroupUrl(context.group.slug)} class="mt-2 block rounded-lg px-3 py-2 font-bold text-lg hover:text-[var(--primary)] transition">
+        {context.group.title}
+    </a>
+    <div class="mt-2 flex flex-col gap-3">
+        {context.sections.map((section) => (
+            <section>
+                {section.name && <div class="px-3 mb-1 text-xs font-bold uppercase tracking-wide text-30">{section.name}</div>}
+                <div class="flex flex-col gap-1">
+                    {section.entries.map((document) => {
+                        const active = document.slug === context.currentSlug;
+                        return (
+                            <a
+                                href={getPostUrlBySlug(document.slug)}
+                                aria-current={active ? "page" : undefined}
+                                class:list={[
+                                    "rounded-lg px-3 py-2 text-sm transition overflow-hidden text-ellipsis whitespace-nowrap",
+                                    active
+                                        ? "bg-[var(--primary)] text-white font-bold"
+                                        : "btn-plain text-75",
+                                ]}
+                            >
+                                {document.title}
+                            </a>
+                        );
+                    })}
+                </div>
+            </section>
+        ))}
+    </div>
+</div>
