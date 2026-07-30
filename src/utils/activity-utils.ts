@@ -1,9 +1,9 @@
 import { execFile } from "node:child_process";
 import {
 	ACTIVITY_TIMEZONE,
+	type ActivitySummary,
 	buildActivitySummary,
 	parseGitLog,
-	type ActivitySummary,
 } from "./activity-core";
 
 export type ActivityGitRunner = () => Promise<string>;
