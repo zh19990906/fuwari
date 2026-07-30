@@ -7,6 +7,7 @@ import {
 	sortDocGroups,
 	validateDocsConfiguration,
 } from "../.test-dist/src/utils/docs-core.js";
+import "./content-migration.test.mjs";
 
 const groups = [
 	{ slug: "docker", title: "Docker", order: 20 },
@@ -66,7 +67,10 @@ test("excludes normal posts and sorts documents by section and order", () => {
 		sortDocEntries(yoloDocs).map((entry) => entry.slug),
 		["deploy", "install", "train"],
 	);
-	assert.equal(sortDocEntries(entries).some((entry) => entry.slug === "blog-post"), false);
+	assert.equal(
+		sortDocEntries(entries).some((entry) => entry.slug === "blog-post"),
+		false,
+	);
 });
 
 test("groups documents into named sections and puts the empty section last", () => {
