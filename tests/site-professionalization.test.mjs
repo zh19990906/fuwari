@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 import test from "node:test";
 
@@ -7,6 +7,10 @@ const root = process.cwd();
 
 async function read(relativePath) {
 	return readFile(path.join(root, relativePath), "utf8");
+}
+
+async function exists(relativePath) {
+	await access(path.join(root, relativePath));
 }
 
 test("documentation series cards keep equal heights and stable title alignment", async () => {
@@ -45,7 +49,10 @@ test("activity navigation and runtime labels are registered", async () => {
 	]);
 	assert.match(types, /Activity/);
 	assert.match(presets, /\/activity\//);
-	assert.match(config, /LinkPreset\.Docs,[\s\S]*LinkPreset\.Activity,[\s\S]*LinkPreset\.About/);
+	assert.match(
+		config,
+		/LinkPreset\.Docs,[\s\S]*LinkPreset\.Activity,[\s\S]*LinkPreset\.About/,
+	);
 	for (const text of [
 		"开发动态",
 		"Development activity",
@@ -61,4 +68,54 @@ test("activity navigation and runtime labels are registered", async () => {
 		assert.match(labels, new RegExp(text));
 	}
 	assert.match(about, /\/activity\//);
+});
+
+test("brand assets and explicit favicon configuration exist", async () => {
+	await Promise.all([
+		exists("public/favicon.svg"),
+		exists("public/apple-touch-icon.png"),
+		exists("public/og-default.png"),
+	]);
+	const config = await read("src/config.ts");
+	assert.match(config, /favicon:\s*\[[\s\S]*\/favicon\.svg/);
+	assert.doesNotMatch(config, /demo-banner/);
+});
+
+test("root layout emits normalized canonical social and structured metadata", async () => {
+	const [layout, grid, post] = await Promise.all([
+		read("src/layouts/Layout.astro"),
+		read("src/layouts/MainGridLayout.astro"),
+		read("src/pages/posts/[...slug].astro"),
+	]);
+	assert.match(layout, /rel="canonical"/);
+	assert.match(layout, /property="og:image"/);
+	assert.match(layout, /property="og:image:width"/);
+	assert.match(layout, /name="twitter:image"/);
+	assert.match(layout, /property="article:published_time"/);
+	assert.match(layout, /property="article:modified_time"/);
+	assert.match(layout, /application\/ld\+json/);
+	assert.match(layout, /url\("\/rss\.xml"\)/);
+	assert.match(grid, /socialImage/);
+	assert.match(grid, /published/);
+	assert.match(grid, /updated/);
+	assert.match(post, /socialImage=\{entry\.data\.image\}/);
+	assert.match(post, /published=\{entry\.data\.published\}/);
+	assert.match(post, /updated=\{entry\.data\.updated\}/);
+	assert.doesNotMatch(post, /const jsonLd/);
+});
+
+test("robots 404 and workflows support the deployed base path and full history", async () => {
+	const [robots, notFound, build, deploy] = await Promise.all([
+		read("src/pages/robots.txt.ts"),
+		read("src/pages/404.astro"),
+		read(".github/workflows/build.yml"),
+		read(".github/workflows/deploy.yml"),
+	]);
+	assert.match(robots, /sitemap-index\.xml/);
+	assert.match(robots, /text\/plain/);
+	for (const route of ["/", "/docs/", "/archive/", "/activity/"]) {
+		assert.match(notFound, new RegExp(route.replaceAll("/", "\\/")));
+	}
+	assert.equal((build.match(/fetch-depth:\s*0/g) || []).length, 2);
+	assert.equal((deploy.match(/fetch-depth:\s*0/g) || []).length, 1);
 });
