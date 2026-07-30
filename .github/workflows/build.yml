@@ -46,6 +46,9 @@ jobs:
       - name: Run site personalization tests
         run: pnpm test:site-personalization
 
+      - name: Run site professionalization tests
+        run: pnpm test:site-professionalization
+
       - name: Run Astro Check
         run: pnpm astro check
 
