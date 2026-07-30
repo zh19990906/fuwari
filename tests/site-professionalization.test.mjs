@@ -13,7 +13,7 @@ async function exists(relativePath) {
 	await access(path.join(root, relativePath));
 }
 
-test("documentation series cards keep equal heights and stable title alignment", async () => {
+test("documentation series cards keep equal heights and center an odd final item", async () => {
 	const page = await read("src/pages/docs/index.astro");
 	assert.match(page, /grid-cols-1 md:grid-cols-2[^\n"]*items-stretch/);
 	assert.match(
@@ -22,6 +22,8 @@ test("documentation series cards keep equal heights and stable title alignment",
 	);
 	assert.match(page, /flex items-start justify-between gap-4/);
 	assert.match(page, /data-doc-group-description/);
+	assert.match(page, /md:col-span-2/);
+	assert.match(page, /md:justify-self-center/);
 });
 
 test("activity page and sidebar use the real build-time activity summary", async () => {
@@ -76,25 +78,33 @@ test("brand assets and explicit favicon configuration exist", async () => {
 		exists("public/apple-touch-icon.png"),
 		exists("public/og-default.png"),
 	]);
-	const config = await read("src/config.ts");
+	const [config, generator, packageJson] = await Promise.all([
+		read("src/config.ts"),
+		read("scripts/generate-brand-assets.mjs"),
+		read("package.json"),
+	]);
 	assert.match(config, /favicon:\s*\[[\s\S]*\/favicon\.svg/);
 	assert.doesNotMatch(config, /demo-banner/);
+	assert.match(generator, /apple-touch-icon\.png/);
+	assert.match(generator, /og-default\.png/);
+	assert.match(packageJson, /generate:brand-assets/);
 });
 
-test("root layout emits normalized canonical social and structured metadata", async () => {
-	const [layout, grid, post] = await Promise.all([
-		read("src/layouts/Layout.astro"),
+test("seo head emits normalized canonical social and structured metadata", async () => {
+	const [seo, grid, post] = await Promise.all([
+		read("src/components/SeoHead.astro"),
 		read("src/layouts/MainGridLayout.astro"),
 		read("src/pages/posts/[...slug].astro"),
 	]);
-	assert.match(layout, /rel="canonical"/);
-	assert.match(layout, /property="og:image"/);
-	assert.match(layout, /property="og:image:width"/);
-	assert.match(layout, /name="twitter:image"/);
-	assert.match(layout, /property="article:published_time"/);
-	assert.match(layout, /property="article:modified_time"/);
-	assert.match(layout, /application\/ld\+json/);
-	assert.match(layout, /url\("\/rss\.xml"\)/);
+	assert.match(seo, /rel="canonical"/);
+	assert.match(seo, /property="og:image"/);
+	assert.match(seo, /property="og:image:width"/);
+	assert.match(seo, /name="twitter:image"/);
+	assert.match(seo, /property="article:published_time"/);
+	assert.match(seo, /property="article:modified_time"/);
+	assert.match(seo, /application\/ld\+json/);
+	assert.match(seo, /url\("\/rss\.xml"\)/);
+	assert.match(grid, /<SeoHead/);
 	assert.match(grid, /socialImage/);
 	assert.match(grid, /published/);
 	assert.match(grid, /updated/);
