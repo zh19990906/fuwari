@@ -24,4 +24,9 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
 		url: "/docs/",
 		i18nKey: UiLabelKey.docs,
 	},
+	[LinkPreset.Activity]: {
+		name: uiLanguageLabels.zh_CN[UiLabelKey.activity],
+		url: "/activity/",
+		i18nKey: UiLabelKey.activity,
+	},
 };
