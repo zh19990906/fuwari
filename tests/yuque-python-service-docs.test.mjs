@@ -102,3 +102,19 @@ for (const [filename, config] of Object.entries(expectedDocs)) {
 		);
 	});
 }
+
+test("Python service guides use unique titles and document order values", async () => {
+	const metadata = await Promise.all(
+		Object.keys(expectedDocs).map(async (filename) => {
+			const content = await readRequiredFile(filename);
+			const title = content.match(/^title:\s*(.+)$/m)?.[1]?.trim();
+			const order = content.match(/^docOrder:\s*(\d+)$/m)?.[1];
+			assert.ok(title, `${filename} must define a title`);
+			assert.ok(order, `${filename} must define docOrder`);
+			return { title, order };
+		}),
+	);
+
+	assert.equal(new Set(metadata.map(({ title }) => title)).size, metadata.length);
+	assert.equal(new Set(metadata.map(({ order }) => order)).size, metadata.length);
+});
