@@ -12,7 +12,6 @@
   "include": [
     "../src/i18n/ui-language-core.ts",
     "../src/utils/docs-core.ts",
-    "../src/utils/activity-core.ts",
-    "../src/utils/activity-utils.ts"
+    "../src/utils/activity-core.ts"
   ]
 }
