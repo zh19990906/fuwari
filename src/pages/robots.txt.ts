@@ -1,5 +1,5 @@
-import type { APIRoute } from "astro";
 import { url } from "@utils/url-utils";
+import type { APIRoute } from "astro";
 
 export const GET: APIRoute = ({ site }) => {
 	const siteRoot = site ?? new URL("https://zh19990906.github.io");
