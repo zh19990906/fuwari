@@ -1,14 +1,14 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import { docsGroups } from "../config/docs";
 import {
-	getDocNavigation,
-	groupDocsBySection,
-	sortDocEntries,
-	sortDocGroups,
 	type DocEntryLike,
 	type DocGroupConfig,
 	type DocNavigation,
 	type DocSection,
+	getDocNavigation,
+	groupDocsBySection,
+	sortDocEntries,
+	sortDocGroups,
 	validateDocsConfiguration,
 } from "./docs-core";
 
@@ -50,7 +50,8 @@ function toCoreEntry(entry: CollectionEntry<"posts">): DocEntryLike {
 function toDocumentationEntry(
 	entry: CollectionEntry<"posts">,
 ): DocumentationEntry | undefined {
-	if (entry.data.contentType !== "docs" || !entry.data.docGroup) return undefined;
+	if (entry.data.contentType !== "docs" || !entry.data.docGroup)
+		return undefined;
 	return {
 		...toCoreEntry(entry),
 		entry,
@@ -73,7 +74,9 @@ async function loadDocumentationEntries(): Promise<DocumentationEntry[]> {
 export async function getDocsGroupSummaries(): Promise<DocsGroupSummary[]> {
 	const entries = await loadDocumentationEntries();
 	return sortDocGroups(docsGroups).map((group) => {
-		const groupEntries = entries.filter((entry) => entry.docGroup === group.slug);
+		const groupEntries = entries.filter(
+			(entry) => entry.docGroup === group.slug,
+		);
 		return {
 			group,
 			entries: groupEntries,
@@ -95,7 +98,8 @@ export async function getDocsForGroup(
 export async function getDocsContextForEntry(
 	entry: CollectionEntry<"posts">,
 ): Promise<DocsArticleContext | undefined> {
-	if (entry.data.contentType !== "docs" || !entry.data.docGroup) return undefined;
+	if (entry.data.contentType !== "docs" || !entry.data.docGroup)
+		return undefined;
 	const summary = await getDocsForGroup(entry.data.docGroup);
 	if (!summary) {
 		throw new Error(
