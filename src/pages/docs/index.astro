@@ -30,19 +30,19 @@ const groups = await getDocsGroupSummaries();
                     <a
                         href={getDocsGroupUrl(group.slug)}
                         class:list={[
-                            "btn-card rounded-2xl p-5 h-full grid grid-rows-[auto_1fr] active:scale-[0.98]",
+                            "btn-card rounded-2xl p-5 h-full w-full grid grid-rows-[auto_1fr] text-left !justify-stretch !items-stretch active:scale-[0.98]",
                             {
                                 "md:col-span-2 md:w-[calc(50%_-_0.5rem)] md:justify-self-center": isOddFinalCard,
                             },
                         ]}
                     >
-                        <div class="flex items-start justify-between gap-4">
-                            <h2 class="text-xl font-bold text-90">{group.title}</h2>
-                            <span class="shrink-0 min-w-8 h-8 px-2 rounded-full bg-[var(--primary)] text-white text-sm font-bold flex items-center justify-center">
+                        <div class="flex items-start justify-between gap-4 w-full">
+                            <h2 class="text-xl font-bold text-90 text-left">{group.title}</h2>
+                            <span class="shrink-0 ml-auto min-w-8 h-8 px-2 rounded-full bg-[var(--primary)] text-white text-sm font-bold flex items-center justify-center">
                                 {count}
                             </span>
                         </div>
-                        {group.description && <p data-doc-group-description class="mt-2 text-sm text-50 leading-6">{group.description}</p>}
+                        {group.description && <p data-doc-group-description class="mt-2 text-sm text-50 leading-6 text-left self-start w-full">{group.description}</p>}
                     </a>
                 );
             })}
