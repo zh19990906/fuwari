@@ -119,9 +119,7 @@ export function parseGitLog(raw: string): ActivityCommit[] {
 				...bodyParts
 			] = record.split("\x1f");
 			const body = bodyParts.join("\x1f");
-			const parents = parentsText.trim()
-				? parentsText.trim().split(/\s+/)
-				: [];
+			const parents = parentsText.trim() ? parentsText.trim().split(/\s+/) : [];
 			const isMerge = parents.length > 1;
 			return {
 				hash: hash.trim(),
