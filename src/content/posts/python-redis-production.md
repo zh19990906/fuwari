@@ -1,6 +1,5 @@
 ---
 title: Python 生产环境使用 Redis
-author: placeholder
 published: 2026-07-30
 updated: 2026-07-30
 description: 使用 redis-py 管理连接池、超时、TTL、Pipeline、SCAN 和并发占位，并理解单实例方案的可靠性边界。
