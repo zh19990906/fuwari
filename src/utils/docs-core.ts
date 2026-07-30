@@ -123,9 +123,7 @@ export function validateDocsConfiguration(
 		if (entry.contentType !== "docs") continue;
 		const groupSlug = normalizeValue(entry.docGroup);
 		if (!groupSlug) {
-			throw new Error(
-				`Documentation entry ${entry.slug} is missing docGroup`,
-			);
+			throw new Error(`Documentation entry ${entry.slug} is missing docGroup`);
 		}
 		if (!groupSlugs.has(groupSlug)) {
 			throw new Error(
