@@ -31,4 +31,16 @@ export const docsGroups: DocGroupConfig[] = [
 		description: "YOLO 版本演进、训练、推理与部署笔记",
 		order: 50,
 	},
+	{
+		slug: "nginx",
+		title: "Nginx",
+		description: "反向代理、HTTPS、证书管理与负载均衡实践",
+		order: 60,
+	},
+	{
+		slug: "ai-llm",
+		title: "AI / LLM",
+		description: "NLP、注意力机制、Transformer 与大语言模型基础",
+		order: 70,
+	},
 ];
