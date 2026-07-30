@@ -4,15 +4,28 @@ import type I18nKey from "../i18n/i18nKey";
 import { en } from "../i18n/languages/en";
 import { zh_CN } from "../i18n/languages/zh_CN";
 import { UI_LANGUAGE_STORAGE_KEY } from "../i18n/ui-language-core";
+import {
+	uiLanguageLabels,
+	type UiLabelKeyValue,
+} from "../i18n/ui-language-labels";
 
 interface Props {
-	titleKey?: I18nKey;
+	titleKey?: I18nKey | UiLabelKeyValue;
 }
 
 const { titleKey } = Astro.props;
 const titleKeyValue = titleKey ?? "";
 const titleTranslations = titleKey
-	? { en: en[titleKey], zh_CN: zh_CN[titleKey] }
+	? {
+			en:
+				(en as Record<string, string>)[titleKey] ??
+				(uiLanguageLabels.en as Record<string, string>)[titleKey] ??
+				"",
+			zh_CN:
+				(zh_CN as Record<string, string>)[titleKey] ??
+				(uiLanguageLabels.zh_CN as Record<string, string>)[titleKey] ??
+				"",
+		}
 	: { en: "", zh_CN: "" };
 const siteTitle = siteConfig.title;
 ---
