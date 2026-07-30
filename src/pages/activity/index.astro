@@ -5,8 +5,9 @@ import { getActivitySummary } from "@utils/activity-utils";
 import { Icon } from "astro-icon/components";
 
 const summary = await getActivitySummary();
-const groupedCommits = summary.commits.reduce<
-	Record<string, typeof summary.commits>
+const recentCommits = summary.commits.slice(0, 10);
+const groupedCommits = recentCommits.reduce<
+	Record<string, typeof recentCommits>
 >((groups, commit) => {
 	const commits = groups[commit.dateKey] || [];
 	commits.push(commit);
@@ -137,16 +138,22 @@ function kindLabel(kind: string): string {
 											target="_blank"
 											rel="noopener"
 											class:list={[
-												"btn-card rounded-xl px-4 py-3 grid grid-cols-[3.5rem_auto] sm:grid-cols-[3.5rem_4rem_auto_4rem] gap-3 items-center",
+												"btn-card rounded-xl px-4 py-3 grid grid-cols-[4rem_minmax(0,1fr)] sm:grid-cols-[4rem_5rem_minmax(0,1fr)_4.5rem] gap-x-3 gap-y-2 items-center w-full !justify-stretch text-left",
 												{ "opacity-65": commit.kind === "chore" || commit.kind === "test" },
 											]}
 										>
-											<span class="text-xs text-40">{formatShanghaiTime(commit.committedAt)}</span>
-											<span class="hidden sm:inline-flex justify-center rounded-full px-2 py-1 text-xs bg-[var(--primary)]/10 text-[var(--primary)]">
+											<span data-activity-time class="text-xs text-40 tabular-nums justify-self-start">
+												{formatShanghaiTime(commit.committedAt)}
+											</span>
+											<span data-activity-kind class="hidden sm:inline-flex justify-self-start rounded-full px-2 py-1 text-xs bg-[var(--primary)]/10 text-[var(--primary)]">
 												{kindLabel(commit.kind)}
 											</span>
-											<span class="text-sm text-75 min-w-0 break-words">{commit.displayTitle}</span>
-											<code class="hidden sm:block text-xs text-40 text-right">{commit.hash.slice(0, 7)}</code>
+											<span data-activity-title class="text-sm text-75 min-w-0 break-words justify-self-stretch text-left">
+												{commit.displayTitle}
+											</span>
+											<code data-activity-hash class="hidden sm:block text-xs text-40 tabular-nums justify-self-end text-right">
+												{commit.hash.slice(0, 7)}
+											</code>
 										</a>
 									))}
 								</div>

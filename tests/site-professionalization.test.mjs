@@ -13,17 +13,36 @@ async function exists(relativePath) {
 	await access(path.join(root, relativePath));
 }
 
-test("documentation series cards keep equal heights and center an odd final item", async () => {
+test("documentation series cards keep equal heights and explicit edge alignment", async () => {
 	const page = await read("src/pages/docs/index.astro");
 	assert.match(page, /grid-cols-1 md:grid-cols-2[^\n"]*items-stretch/);
 	assert.match(
 		page,
 		/btn-card[^\n"]*h-full[^\n"]*grid[^\n"]*grid-rows-\[auto_1fr\]/,
 	);
-	assert.match(page, /flex items-start justify-between gap-4/);
-	assert.match(page, /data-doc-group-description/);
+	assert.match(page, /btn-card[^\n"]*text-left/);
+	assert.match(page, /btn-card[^\n"]*!justify-stretch/);
+	assert.match(page, /flex items-start justify-between gap-4 w-full/);
+	assert.match(page, /<h2 class="[^"]*text-left[^"]*"/);
+	assert.match(page, /<span class="[^"]*ml-auto[^"]*"/);
+	assert.match(page, /data-doc-group-description[^\n>]*class="[^"]*text-left/);
 	assert.match(page, /md:col-span-2/);
 	assert.match(page, /md:justify-self-center/);
+});
+
+test("activity timeline shows only ten recent commits in aligned full-width columns", async () => {
+	const page = await read("src/pages/activity/index.astro");
+	assert.match(page, /const recentCommits = summary\.commits\.slice\(0, 10\)/);
+	assert.match(page, /recentCommits\.reduce/);
+	assert.match(
+		page,
+		/sm:grid-cols-\[4rem_5rem_minmax\(0,1fr\)_4\.5rem\]/,
+	);
+	assert.match(page, /btn-card[^\n"]*w-full[^\n"]*!justify-stretch[^\n"]*text-left/);
+	assert.match(page, /data-activity-time[^\n>]*class="[^"]*justify-self-start/);
+	assert.match(page, /data-activity-kind[^\n>]*class="[^"]*justify-self-start/);
+	assert.match(page, /data-activity-title[^\n>]*class="[^"]*justify-self-stretch/);
+	assert.match(page, /data-activity-hash[^\n>]*class="[^"]*justify-self-end/);
 });
 
 test("activity page and sidebar use the real build-time activity summary", async () => {
