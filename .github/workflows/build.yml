@@ -43,6 +43,9 @@ jobs:
       - name: Run documentation tests
         run: pnpm test:docs
 
+      - name: Run site personalization tests
+        run: pnpm test:site-personalization
+
       - name: Run Astro Check
         run: pnpm astro check
 
