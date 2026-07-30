@@ -43,6 +43,9 @@ jobs:
       - name: Run documentation tests
         run: pnpm test:docs
 
+      - name: Run activity tests
+        run: pnpm test:activity
+
       - name: Run site personalization tests
         run: pnpm test:site-personalization
 
