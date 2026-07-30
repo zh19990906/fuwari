@@ -2,16 +2,10 @@
 import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { Icon } from "astro-icon/components";
 import { docsGroups } from "../../config/docs";
+import { UiLabelKey, uiLanguageLabels } from "../../i18n/ui-language-labels";
 import { sortDocGroups } from "../../utils/docs-core";
 import { getDocsForGroup } from "../../utils/docs-utils";
-import {
-	getDocsUrl,
-	getPostUrlBySlug,
-} from "../../utils/url-utils";
-import {
-	UiLabelKey,
-	uiLanguageLabels,
-} from "../../i18n/ui-language-labels";
+import { getDocsUrl, getPostUrlBySlug } from "../../utils/url-utils";
 
 export function getStaticPaths() {
 	return sortDocGroups(docsGroups).map((group) => ({
