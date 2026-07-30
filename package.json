@@ -12,7 +12,6 @@
     "type-check": "tsc --noEmit --isolatedDeclarations",
     "test:ui-language": "rm -rf .test-dist && tsc -p tests/tsconfig.json && node --test tests/ui-language.test.mjs",
     "test:docs": "rm -rf .test-dist && tsc -p tests/tsconfig.json && node --test tests/docs-core.test.mjs",
-    "test:content-migration": "node --test tests/content-migration.test.mjs",
     "new-post": "node scripts/new-post.js",
     "format": "biome format --write ./src",
     "lint": "biome check --write ./src",
