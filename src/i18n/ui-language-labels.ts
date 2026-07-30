@@ -60,13 +60,15 @@ export const uiLanguageLabels: Record<
 		[UiLabelKey.recentActivity]: "最近记录",
 		[UiLabelKey.viewAllActivity]: "查看完整记录",
 		[UiLabelKey.activityUnavailable]: "暂无活动数据",
-		[UiLabelKey.activityIntro]: "数据来自本站已部署版本可访问的真实 Git 提交历史。",
+		[UiLabelKey.activityIntro]:
+			"数据来自本站已部署版本可访问的真实 Git 提交历史。",
 		[UiLabelKey.activityHeatmap]: "过去 90 天",
 		[UiLabelKey.activityTimeline]: "提交记录",
 		[UiLabelKey.backHome]: "返回首页",
 		[UiLabelKey.backArchive]: "查看归档",
 		[UiLabelKey.pageNotFound]: "页面不存在",
-		[UiLabelKey.pageNotFoundDescription]: "链接可能已经失效，或者页面地址输入有误。",
+		[UiLabelKey.pageNotFoundDescription]:
+			"链接可能已经失效，或者页面地址输入有误。",
 	},
 	en: {
 		[UiLabelKey.language]: "Page language",
@@ -91,12 +93,14 @@ export const uiLanguageLabels: Record<
 		[UiLabelKey.recentActivity]: "Recent activity",
 		[UiLabelKey.viewAllActivity]: "View all activity",
 		[UiLabelKey.activityUnavailable]: "Activity data unavailable",
-		[UiLabelKey.activityIntro]: "Counts come from the real Git history reachable from the deployed site version.",
+		[UiLabelKey.activityIntro]:
+			"Counts come from the real Git history reachable from the deployed site version.",
 		[UiLabelKey.activityHeatmap]: "Past 90 days",
 		[UiLabelKey.activityTimeline]: "Commit history",
 		[UiLabelKey.backHome]: "Back home",
 		[UiLabelKey.backArchive]: "View archive",
 		[UiLabelKey.pageNotFound]: "Page not found",
-		[UiLabelKey.pageNotFoundDescription]: "The link may be outdated, or the address may be incorrect.",
+		[UiLabelKey.pageNotFoundDescription]:
+			"The link may be outdated, or the address may be incorrect.",
 	},
 };
