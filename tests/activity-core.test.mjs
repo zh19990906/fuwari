@@ -4,9 +4,9 @@ import {
 	buildActivitySummary,
 	classifyActivity,
 	cleanActivityTitle,
+	loadActivitySummary,
 	parseGitLog,
 } from "../.test-dist/src/utils/activity-core.js";
-import { loadActivitySummary } from "../.test-dist/src/utils/activity-utils.js";
 
 const record = ({ hash, parents = "parent", at, subject, body = "" }) =>
 	[hash, parents, at, subject, body].join("\x1f");
