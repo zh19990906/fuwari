@@ -12,8 +12,6 @@ import { Icon } from "astro-icon/components";
 import { licenseConfig } from "src/config";
 import ImageWrapper from "../../components/misc/ImageWrapper.astro";
 import PostMetadata from "../../components/PostMeta.astro";
-import { profileConfig, siteConfig } from "../../config";
-import { formatDateToYYYYMMDD } from "../../utils/date-utils";
 
 export async function getStaticPaths() {
 	const blogEntries = await getSortedPosts();
@@ -44,23 +42,6 @@ const rightNavigation = docsContext?.navigation.next
 	: entry.data.prevSlug
 		? { slug: entry.data.prevSlug, title: entry.data.prevTitle }
 		: undefined;
-
-const jsonLd = {
-	"@context": "https://schema.org",
-	"@type": entry.data.contentType === "docs" ? "TechArticle" : "BlogPosting",
-	headline: entry.data.title,
-	description: entry.data.description || entry.data.title,
-	keywords: entry.data.tags,
-	author: {
-		"@type": "Person",
-		name: profileConfig.name,
-		url: Astro.site,
-	},
-	datePublished: formatDateToYYYYMMDD(entry.data.published),
-	inLanguage: entry.data.lang
-		? entry.data.lang.replace("_", "-")
-		: siteConfig.lang.replace("_", "-"),
-};
 ---
 <MainGridLayout
     banner={entry.data.image}
@@ -68,10 +49,12 @@ const jsonLd = {
     description={entry.data.description}
     lang={entry.data.lang}
     setOGTypeArticle={true}
+    socialImage={entry.data.image}
+    published={entry.data.published}
+    updated={entry.data.updated}
     headings={headings}
     docsContext={docsContext}
 >
-    <script is:inline slot="head" type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>
     <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative mb-4">
         <div id="post-container" class="card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full">
             <div class="flex flex-row text-black/30 dark:text-white/30 gap-5 mb-3 transition onload-animation">
