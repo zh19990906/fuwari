@@ -19,18 +19,16 @@ const groups = await getDocsGroupSummaries();
                 {uiLanguageLabels.zh_CN[UiLabelKey.documentation]}
             </h1>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 items-stretch">
             {groups.map(({ group, count }) => (
-                <a href={getDocsGroupUrl(group.slug)} class="btn-card rounded-2xl p-5 block active:scale-[0.98]">
+                <a href={getDocsGroupUrl(group.slug)} class="btn-card rounded-2xl p-5 h-full grid grid-rows-[auto_1fr] active:scale-[0.98]">
                     <div class="flex items-start justify-between gap-4">
-                        <div>
-                            <h2 class="text-xl font-bold text-90">{group.title}</h2>
-                            {group.description && <p class="mt-2 text-sm text-50 leading-6">{group.description}</p>}
-                        </div>
-                        <span class="min-w-8 h-8 px-2 rounded-full bg-[var(--primary)] text-white text-sm font-bold flex items-center justify-center">
+                        <h2 class="text-xl font-bold text-90">{group.title}</h2>
+                        <span class="shrink-0 min-w-8 h-8 px-2 rounded-full bg-[var(--primary)] text-white text-sm font-bold flex items-center justify-center">
                             {count}
                         </span>
                     </div>
+                    {group.description && <p data-doc-group-description class="mt-2 text-sm text-50 leading-6">{group.description}</p>}
                 </a>
             ))}
         </div>
