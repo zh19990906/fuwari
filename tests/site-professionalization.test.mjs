@@ -30,6 +30,18 @@ test("documentation series cards keep equal heights and explicit edge alignment"
 	assert.match(page, /md:justify-self-center/);
 });
 
+test("documentation entries align their number and title group to the left", async () => {
+	const page = await read("src/pages/docs/[group].astro");
+	assert.match(
+		page,
+		/btn-card[^\n"]*w-full[^\n"]*!justify-start[^\n"]*text-left/,
+	);
+	assert.match(
+		page,
+		/<span class="[^"]*flex-1[^"]*text-left[^"]*">\{document\.title\}<\/span>/,
+	);
+});
+
 test("activity timeline shows only ten recent commits in aligned full-width columns", async () => {
 	const page = await read("src/pages/activity/index.astro");
 	assert.match(page, /const recentCommits = summary\.commits\.slice\(0, 10\)/);
