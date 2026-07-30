@@ -1,0 +1,61 @@
+---
+import { UiLabelKey, uiLanguageLabels } from "@i18n/ui-language-labels";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { url } from "@utils/url-utils";
+import { Icon } from "astro-icon/components";
+
+const links = [
+	{
+		href: url("/"),
+		label: UiLabelKey.backHome,
+		icon: "material-symbols:home-rounded",
+	},
+	{
+		href: url("/docs/"),
+		label: UiLabelKey.documentation,
+		icon: "material-symbols:menu-book-rounded",
+	},
+	{
+		href: url("/archive/"),
+		label: UiLabelKey.backArchive,
+		icon: "material-symbols:archive-rounded",
+	},
+	{
+		href: url("/activity/"),
+		label: UiLabelKey.activity,
+		icon: "material-symbols:history-rounded",
+	},
+];
+---
+
+<MainGridLayout
+	title={uiLanguageLabels.zh_CN[UiLabelKey.pageNotFound]}
+	titleKey={UiLabelKey.pageNotFound}
+	description={uiLanguageLabels.zh_CN[UiLabelKey.pageNotFoundDescription]}
+>
+	<section class="card-base px-6 py-12 md:px-10 md:py-16 text-center">
+		<div class="text-[6rem] md:text-[8rem] font-black leading-none text-[var(--primary)]/20 select-none">
+			404
+		</div>
+		<h1 class="mt-2 text-3xl font-bold" data-i18n-key={UiLabelKey.pageNotFound}>
+			{uiLanguageLabels.zh_CN[UiLabelKey.pageNotFound]}
+		</h1>
+		<p class="mt-4 text-50" data-i18n-key={UiLabelKey.pageNotFoundDescription}>
+			{uiLanguageLabels.zh_CN[UiLabelKey.pageNotFoundDescription]}
+		</p>
+		<nav
+			class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-3"
+			aria-label="404 navigation"
+		>
+			{links.map((link) => (
+				<a
+					href={link.href}
+					class="btn-card rounded-xl px-4 py-3 flex items-center justify-center gap-2 active:scale-[0.98]"
+				>
+					<Icon name={link.icon} class="text-xl text-[var(--primary)]" />
+					<span data-i18n-key={link.label}>{uiLanguageLabels.zh_CN[link.label]}</span>
+				</a>
+			))}
+		</nav>
+	</section>
+</MainGridLayout>

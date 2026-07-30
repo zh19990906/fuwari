@@ -2,6 +2,7 @@
 import BackToTop from "@components/control/BackToTop.astro";
 import Footer from "@components/Footer.astro";
 import Navbar from "@components/Navbar.astro";
+import SeoHead from "@components/SeoHead.astro";
 import UiLanguageHead from "@components/UiLanguageHead.astro";
 import SideBar from "@components/widget/SideBar.astro";
 import type I18nKey from "@i18n/i18nKey";
@@ -26,6 +27,9 @@ interface Props {
 	description?: string;
 	lang?: string;
 	setOGTypeArticle?: boolean;
+	socialImage?: string;
+	published?: Date;
+	updated?: Date;
 	headings?: MarkdownHeading[];
 	docsContext?: DocsArticleContext;
 }
@@ -37,6 +41,9 @@ const {
 	description,
 	lang,
 	setOGTypeArticle,
+	socialImage,
+	published,
+	updated,
 	headings = [],
 	docsContext,
 } = Astro.props;
@@ -51,6 +58,16 @@ const mainPanelTop = siteConfig.banner.enable
 
 <Layout title={title} banner={banner} description={description} lang={lang} setOGTypeArticle={setOGTypeArticle}>
 
+<SeoHead
+	slot="head"
+	title={title}
+	description={description}
+	lang={lang}
+	socialImage={socialImage}
+	published={published}
+	updated={updated}
+	isArticle={setOGTypeArticle}
+/>
 <UiLanguageHead slot="head" titleKey={titleKey} />
 <slot slot="head" name="head"></slot>
 <div id="top-row" class="z-50 pointer-events-none relative transition-all duration-700 max-w-[var(--page-width)] px-0 md:px-4 mx-auto">

@@ -1,0 +1,75 @@
+---
+import { UiLabelKey, uiLanguageLabels } from "@i18n/ui-language-labels";
+import { getActivitySummary } from "@utils/activity-utils";
+import { url } from "@utils/url-utils";
+import { Icon } from "astro-icon/components";
+
+const summary = await getActivitySummary();
+const latest = summary.commits[0];
+const latestTime = summary.lastUpdatedAt
+	? new Intl.DateTimeFormat("zh-CN", {
+			timeZone: summary.timezone,
+			month: "2-digit",
+			day: "2-digit",
+			hour: "2-digit",
+			minute: "2-digit",
+			hour12: false,
+		}).format(new Date(summary.lastUpdatedAt))
+	: undefined;
+---
+
+<div class="card-base p-4 onload-animation">
+	<div class="flex items-center gap-2 mb-3">
+		<Icon name="material-symbols:history-rounded" class="text-xl text-[var(--primary)]" />
+		<h2 class="font-bold text-90" data-i18n-key={UiLabelKey.developmentActivity}>
+			{uiLanguageLabels.zh_CN[UiLabelKey.developmentActivity]}
+		</h2>
+	</div>
+
+	{summary.available ? (
+		<>
+			<div class="grid grid-cols-3 gap-2 mb-3 text-center">
+				<div class="rounded-xl bg-black/5 dark:bg-white/5 px-2 py-2">
+					<div class="font-bold text-lg text-90">{summary.todayCommits}</div>
+					<div class="text-[0.7rem] text-50" data-i18n-key={UiLabelKey.todayCommits}>
+						{uiLanguageLabels.zh_CN[UiLabelKey.todayCommits]}
+					</div>
+				</div>
+				<div class="rounded-xl bg-black/5 dark:bg-white/5 px-2 py-2">
+					<div class="font-bold text-lg text-90">{summary.todayReleases}</div>
+					<div class="text-[0.7rem] text-50" data-i18n-key={UiLabelKey.todayReleases}>
+						{uiLanguageLabels.zh_CN[UiLabelKey.todayReleases]}
+					</div>
+				</div>
+				<div class="rounded-xl bg-black/5 dark:bg-white/5 px-2 py-2">
+					<div class="font-bold text-lg text-90">{summary.last7DaysCommits}</div>
+					<div class="text-[0.7rem] text-50" data-i18n-key={UiLabelKey.last7Days}>
+						{uiLanguageLabels.zh_CN[UiLabelKey.last7Days]}
+					</div>
+				</div>
+			</div>
+			{latest && (
+				<div class="rounded-xl border border-[var(--line-divider)] px-3 py-2 mb-3">
+					<div class="text-xs text-40 mb-1 flex justify-between gap-2">
+						<span data-i18n-key={UiLabelKey.recentActivity}>
+							{uiLanguageLabels.zh_CN[UiLabelKey.recentActivity]}
+						</span>
+						{latestTime && <span>{latestTime}</span>}
+					</div>
+					<div class="text-sm text-75 line-clamp-2">{latest.displayTitle}</div>
+				</div>
+			)}
+		</>
+	) : (
+		<p class="text-sm text-50 mb-3" data-i18n-key={UiLabelKey.activityUnavailable}>
+			{uiLanguageLabels.zh_CN[UiLabelKey.activityUnavailable]}
+		</p>
+	)}
+
+	<a href={url("/activity/")} class="btn-regular rounded-lg h-9 w-full gap-2 text-sm font-bold active:scale-95">
+		<span data-i18n-key={UiLabelKey.viewAllActivity}>
+			{uiLanguageLabels.zh_CN[UiLabelKey.viewAllActivity]}
+		</span>
+		<Icon name="material-symbols:arrow-forward-rounded" />
+	</a>
+</div>
