@@ -8,6 +8,7 @@ import {
 	validateDocsConfiguration,
 } from "../.test-dist/src/utils/docs-core.js";
 import "./content-migration.test.mjs";
+import "./yolo-crowdhuman-doc.test.mjs";
 
 const groups = [
 	{ slug: "docker", title: "Docker", order: 20 },
