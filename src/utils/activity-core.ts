@@ -34,6 +34,8 @@ export interface ActivitySummary {
 	commits: ActivityCommit[];
 }
 
+export type ActivityGitRunner = () => Promise<string>;
+
 const genericPullRequestMerge = /^Merge pull request #\d+(?:\s+from\s+.+)?$/i;
 
 function formatShanghaiDateKey(value: Date | string): string {
@@ -54,6 +56,19 @@ function shiftDateKey(dateKey: string, days: number): string {
 	const date = new Date(`${dateKey}T00:00:00Z`);
 	date.setUTCDate(date.getUTCDate() + days);
 	return date.toISOString().slice(0, 10);
+}
+
+function unavailableActivitySummary(now: Date): ActivitySummary {
+	return {
+		available: false,
+		generatedAt: now.toISOString(),
+		timezone: ACTIVITY_TIMEZONE,
+		todayCommits: 0,
+		todayReleases: 0,
+		last7DaysCommits: 0,
+		heatmap: [],
+		commits: [],
+	};
 }
 
 export function cleanActivityTitle(subject: string, body: string): string {
@@ -175,4 +190,15 @@ export function buildActivitySummary(
 		heatmap,
 		commits: sorted.slice(0, 200),
 	};
+}
+
+export async function loadActivitySummary(
+	runGit: ActivityGitRunner,
+	now = new Date(),
+): Promise<ActivitySummary> {
+	try {
+		return buildActivitySummary(parseGitLog(await runGit()), now);
+	} catch {
+		return unavailableActivitySummary(now);
+	}
 }
