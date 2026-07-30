@@ -19,14 +19,22 @@ const expectedDocs = {
 	"attention-and-transformer.md": ["ai-llm", "模型架构", "20"],
 };
 
+async function readRequiredFile(filename) {
+	try {
+		return await readFile(path.join(root, "src/content/posts", filename), "utf8");
+	} catch (error) {
+		if (error?.code === "ENOENT") {
+			assert.fail(`Missing required migrated document: ${filename}`);
+		}
+		throw error;
+	}
+}
+
 for (const [filename, [group, section, order]] of Object.entries(
 	expectedDocs,
 )) {
 	test(`${filename} follows documentation metadata and safety rules`, async () => {
-		const content = await readFile(
-			path.join(root, "src/content/posts", filename),
-			"utf8",
-		);
+		const content = await readRequiredFile(filename);
 		assert.match(content, /^---\n[\s\S]*?\n---/);
 		assert.match(content, /contentType: docs/);
 		assert.match(content, new RegExp(`docGroup: ${group}`));
