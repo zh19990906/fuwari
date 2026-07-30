@@ -11,6 +11,7 @@ export const UiLabelKey = {
 	switchToEnglish: "ui.switchToEnglish",
 	docs: "ui.docs",
 	documentation: "ui.documentation",
+	documentationIntro: "ui.documentationIntro",
 	backToDocs: "ui.backToDocs",
 	activity: "ui.activity",
 	developmentActivity: "ui.developmentActivity",
@@ -47,6 +48,8 @@ export const uiLanguageLabels: Record<
 		[UiLabelKey.switchToEnglish]: "切换为英文",
 		[UiLabelKey.docs]: "文档",
 		[UiLabelKey.documentation]: "文档系列",
+		[UiLabelKey.documentationIntro]:
+			"系统整理个人技术学习与实践记录，覆盖 Linux、Python、容器、数据库、AI 与工程部署。",
 		[UiLabelKey.backToDocs]: "返回文档",
 		[UiLabelKey.activity]: "动态",
 		[UiLabelKey.developmentActivity]: "开发动态",
@@ -76,6 +79,8 @@ export const uiLanguageLabels: Record<
 		[UiLabelKey.switchToEnglish]: "Switch to English",
 		[UiLabelKey.docs]: "Docs",
 		[UiLabelKey.documentation]: "Documentation",
+		[UiLabelKey.documentationIntro]:
+			"A maintained collection of practical notes covering Linux, Python, containers, databases, AI, and engineering deployment.",
 		[UiLabelKey.backToDocs]: "Back to docs",
 		[UiLabelKey.activity]: "Activity",
 		[UiLabelKey.developmentActivity]: "Development activity",
