@@ -1,17 +1,18 @@
 ---
-import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { UiLabelKey, uiLanguageLabels } from "@i18n/ui-language-labels";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
 import { getActivitySummary } from "@utils/activity-utils";
 import { Icon } from "astro-icon/components";
 
 const summary = await getActivitySummary();
-const groupedCommits = summary.commits.reduce<Record<string, typeof summary.commits>>(
-	(groups, commit) => {
-		(groups[commit.dateKey] ??= []).push(commit);
-		return groups;
-	},
-	{},
-);
+const groupedCommits = summary.commits.reduce<
+	Record<string, typeof summary.commits>
+>((groups, commit) => {
+	const commits = groups[commit.dateKey] || [];
+	commits.push(commit);
+	groups[commit.dateKey] = commits;
+	return groups;
+}, {});
 
 const timelineGroups = Object.entries(groupedCommits);
 const maxHeatmapCount = Math.max(1, ...summary.heatmap.map((day) => day.count));
@@ -35,16 +36,18 @@ function formatShanghaiTime(value: string): string {
 }
 
 function kindLabel(kind: string): string {
-	return {
-		content: "内容",
-		feature: "功能",
-		fix: "修复",
-		docs: "文档",
-		test: "测试",
-		chore: "维护",
-		release: "上线",
-		other: "记录",
-	}[kind] || "记录";
+	return (
+		{
+			content: "内容",
+			feature: "功能",
+			fix: "修复",
+			docs: "文档",
+			test: "测试",
+			chore: "维护",
+			release: "上线",
+			other: "记录",
+		}[kind] || "记录"
+	);
 }
 ---
 
