@@ -36,11 +36,11 @@ if (!summary) {
                     {section.name && <h2 class="text-lg font-bold mb-3 text-75">{section.name}</h2>}
                     <div class="flex flex-col gap-2">
                         {section.entries.map((document, index) => (
-                            <a href={getPostUrlBySlug(document.slug)} class="btn-card rounded-xl px-4 py-3 flex items-center gap-4 active:scale-[0.99]">
+                            <a href={getPostUrlBySlug(document.slug)} class="btn-card rounded-xl px-4 py-3 flex items-center gap-4 w-full !justify-start text-left active:scale-[0.99]">
                                 <span class="w-8 h-8 shrink-0 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-sm font-bold text-[var(--primary)]">
                                     {index + 1}
                                 </span>
-                                <span class="font-bold text-75 overflow-hidden text-ellipsis whitespace-nowrap">{document.title}</span>
+                                <span class="font-bold text-75 flex-1 min-w-0 text-left overflow-hidden text-ellipsis whitespace-nowrap">{document.title}</span>
                             </a>
                         ))}
                     </div>
