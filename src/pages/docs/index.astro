@@ -1,0 +1,41 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { Icon } from "astro-icon/components";
+import {
+	UiLabelKey,
+	uiLanguageLabels,
+} from "../../i18n/ui-language-labels";
+import { getDocsGroupSummaries } from "../../utils/docs-utils";
+import { getDocsGroupUrl } from "../../utils/url-utils";
+
+const groups = await getDocsGroupSummaries();
+---
+
+<MainGridLayout
+    title={uiLanguageLabels.zh_CN[UiLabelKey.documentation]}
+    titleKey={UiLabelKey.documentation}
+>
+    <div class="card-base px-6 md:px-8 py-7">
+        <div class="flex items-center gap-3 mb-6">
+            <Icon name="material-symbols:menu-book-outline-rounded" class="text-3xl text-[var(--primary)]" />
+            <h1 class="text-2xl font-bold" data-i18n-key={UiLabelKey.documentation}>
+                {uiLanguageLabels.zh_CN[UiLabelKey.documentation]}
+            </h1>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {groups.map(({ group, count }) => (
+                <a href={getDocsGroupUrl(group.slug)} class="btn-card rounded-2xl p-5 block active:scale-[0.98]">
+                    <div class="flex items-start justify-between gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-90">{group.title}</h2>
+                            {group.description && <p class="mt-2 text-sm text-50 leading-6">{group.description}</p>}
+                        </div>
+                        <span class="min-w-8 h-8 px-2 rounded-full bg-[var(--primary)] text-white text-sm font-bold flex items-center justify-center">
+                            {count}
+                        </span>
+                    </div>
+                </a>
+            ))}
+        </div>
+    </div>
+</MainGridLayout>
