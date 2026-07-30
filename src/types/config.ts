@@ -1,5 +1,6 @@
 import type { AUTO_MODE, DARK_MODE, LIGHT_MODE } from "@constants/constants";
 import type I18nKey from "@i18n/i18nKey";
+import type { UiLabelKeyValue } from "@i18n/ui-language-labels";
 
 export type SiteConfig = {
 	title: string;
@@ -49,13 +50,14 @@ export enum LinkPreset {
 	Home = 0,
 	Archive = 1,
 	About = 2,
+	Docs = 3,
 }
 
 export type NavBarLink = {
 	name: string;
 	url: string;
 	external?: boolean;
-	i18nKey?: I18nKey;
+	i18nKey?: I18nKey | UiLabelKeyValue;
 };
 
 export type NavBarConfig = {

@@ -1,5 +1,6 @@
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
+import { UiLabelKey, uiLanguageLabels } from "@i18n/ui-language-labels";
 import { LinkPreset, type NavBarLink } from "@/types/config";
 
 export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
@@ -17,5 +18,10 @@ export const LinkPresets: { [key in LinkPreset]: NavBarLink } = {
 		name: i18n(I18nKey.archive),
 		url: "/archive/",
 		i18nKey: I18nKey.archive,
+	},
+	[LinkPreset.Docs]: {
+		name: uiLanguageLabels.zh_CN[UiLabelKey.docs],
+		url: "/docs/",
+		i18nKey: UiLabelKey.docs,
 	},
 };

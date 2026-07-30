@@ -9,5 +9,8 @@
     "rootDir": "..",
     "declaration": false
   },
-  "include": ["../src/i18n/ui-language-core.ts"]
+  "include": [
+    "../src/i18n/ui-language-core.ts",
+    "../src/utils/docs-core.ts"
+  ]
 }

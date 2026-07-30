@@ -11,6 +11,10 @@ const postsCollection = defineCollection({
 		tags: z.array(z.string()).optional().default([]),
 		category: z.string().optional().nullable().default(""),
 		lang: z.string().optional().default(""),
+		contentType: z.enum(["post", "docs"]).optional().default("post"),
+		docGroup: z.string().optional(),
+		docSection: z.string().optional(),
+		docOrder: z.number().int().optional(),
 
 		/* For internal use */
 		prevTitle: z.string().default(""),

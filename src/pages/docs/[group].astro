@@ -1,0 +1,56 @@
+---
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { Icon } from "astro-icon/components";
+import { docsGroups } from "../../config/docs";
+import { UiLabelKey, uiLanguageLabels } from "../../i18n/ui-language-labels";
+import { sortDocGroups } from "../../utils/docs-core";
+import { getDocsForGroup } from "../../utils/docs-utils";
+import { getDocsUrl, getPostUrlBySlug } from "../../utils/url-utils";
+
+export function getStaticPaths() {
+	return sortDocGroups(docsGroups).map((group) => ({
+		params: { group: group.slug },
+	}));
+}
+
+const groupSlug = Astro.params.group ?? "";
+const summary = await getDocsForGroup(groupSlug);
+if (!summary) {
+	throw new Error(`Unknown documentation group: ${groupSlug}`);
+}
+---
+
+<MainGridLayout title={summary.group.title} description={summary.group.description}>
+    <div class="card-base px-6 md:px-8 py-7">
+        <a href={getDocsUrl()} class="btn-plain inline-flex items-center gap-2 rounded-lg px-3 py-2 mb-5 text-sm text-50">
+            <Icon name="material-symbols:arrow-back-rounded" class="text-lg" />
+            <span data-i18n-key={UiLabelKey.backToDocs}>{uiLanguageLabels.zh_CN[UiLabelKey.backToDocs]}</span>
+        </a>
+        <div class="mb-7">
+            <h1 class="text-3xl font-bold text-90">{summary.group.title}</h1>
+            {summary.group.description && <p class="mt-3 text-50 leading-7">{summary.group.description}</p>}
+        </div>
+        <div class="flex flex-col gap-7">
+            {summary.sections.map((section) => (
+                <section>
+                    {section.name && <h2 class="text-lg font-bold mb-3 text-75">{section.name}</h2>}
+                    <div class="flex flex-col gap-2">
+                        {section.entries.map((document, index) => (
+                            <a href={getPostUrlBySlug(document.slug)} class="btn-card rounded-xl px-4 py-3 flex items-center gap-4 active:scale-[0.99]">
+                                <span class="w-8 h-8 shrink-0 rounded-full bg-black/5 dark:bg-white/10 flex items-center justify-center text-sm font-bold text-[var(--primary)]">
+                                    {index + 1}
+                                </span>
+                                <span class="font-bold text-75 overflow-hidden text-ellipsis whitespace-nowrap">{document.title}</span>
+                            </a>
+                        ))}
+                    </div>
+                </section>
+            ))}
+            {summary.count === 0 && (
+                <div class="rounded-xl border border-dashed border-[var(--line-divider)] px-5 py-8 text-center text-50">
+                    暂无文档
+                </div>
+            )}
+        </div>
+    </div>
+</MainGridLayout>
