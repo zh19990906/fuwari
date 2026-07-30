@@ -6,6 +6,7 @@ import {
 	cleanActivityTitle,
 	parseGitLog,
 } from "../.test-dist/src/utils/activity-core.js";
+import { loadActivitySummary } from "../.test-dist/src/utils/activity-utils.js";
 
 const record = ({ hash, parents = "parent", at, subject, body = "" }) =>
 	[hash, parents, at, subject, body].join("\x1f");
@@ -52,15 +53,40 @@ test("preserves meaningful merge subjects and classifies prefixes", () => {
 test("groups counters by Asia Shanghai calendar boundaries", () => {
 	const commits = parseGitLog(
 		[
-			record({ hash: "1".repeat(40), at: "2026-07-30T02:00:00Z", subject: "feat: today" }),
-			record({ hash: "2".repeat(40), parents: "p1 p2", at: "2026-07-29T16:01:00Z", subject: "Merge pull request #5", body: "release: today" }),
-			record({ hash: "3".repeat(40), at: "2026-07-29T15:59:00Z", subject: "fix: yesterday" }),
-			record({ hash: "4".repeat(40), at: "2026-07-24T02:00:00Z", subject: "docs: seventh day" }),
-			record({ hash: "5".repeat(40), at: "2026-07-23T02:00:00Z", subject: "docs: outside range" }),
+			record({
+				hash: "1".repeat(40),
+				at: "2026-07-30T02:00:00Z",
+				subject: "feat: today",
+			}),
+			record({
+				hash: "2".repeat(40),
+				parents: "p1 p2",
+				at: "2026-07-29T16:01:00Z",
+				subject: "Merge pull request #5",
+				body: "release: today",
+			}),
+			record({
+				hash: "3".repeat(40),
+				at: "2026-07-29T15:59:00Z",
+				subject: "fix: yesterday",
+			}),
+			record({
+				hash: "4".repeat(40),
+				at: "2026-07-24T02:00:00Z",
+				subject: "docs: seventh day",
+			}),
+			record({
+				hash: "5".repeat(40),
+				at: "2026-07-23T02:00:00Z",
+				subject: "docs: outside range",
+			}),
 		].join("\x1e"),
 	);
 
-	const summary = buildActivitySummary(commits, new Date("2026-07-30T03:00:00Z"));
+	const summary = buildActivitySummary(
+		commits,
+		new Date("2026-07-30T03:00:00Z"),
+	);
 	assert.equal(summary.available, true);
 	assert.equal(summary.timezone, "Asia/Shanghai");
 	assert.equal(summary.todayCommits, 2);
@@ -83,8 +109,26 @@ test("sorts newest first and limits the detailed timeline to 200 commits", () =>
 		isMerge: false,
 		dateKey: "2026-07-30",
 	}));
-	const summary = buildActivitySummary(commits, new Date("2026-07-30T03:00:00Z"));
+	const summary = buildActivitySummary(
+		commits,
+		new Date("2026-07-30T03:00:00Z"),
+	);
 	assert.equal(summary.commits.length, 200);
 	assert.equal(summary.commits[0].displayTitle, "chore: 204");
 	assert.equal(summary.commits.at(-1).displayTitle, "chore: 5");
+});
+
+test("returns an explicit unavailable summary when git history cannot be read", async () => {
+	const now = new Date("2026-07-30T03:00:00Z");
+	const summary = await loadActivitySummary(async () => {
+		throw new Error("git unavailable");
+	}, now);
+	assert.equal(summary.available, false);
+	assert.equal(summary.timezone, "Asia/Shanghai");
+	assert.equal(summary.generatedAt, now.toISOString());
+	assert.equal(summary.todayCommits, 0);
+	assert.equal(summary.todayReleases, 0);
+	assert.equal(summary.last7DaysCommits, 0);
+	assert.deepEqual(summary.heatmap, []);
+	assert.deepEqual(summary.commits, []);
 });
