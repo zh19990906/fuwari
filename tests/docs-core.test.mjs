@@ -10,6 +10,7 @@ import {
 import "./content-migration.test.mjs";
 import "./yolo-crowdhuman-doc.test.mjs";
 import "./yuque-agent-docs.test.mjs";
+import "./yuque-python-service-docs.test.mjs";
 
 const groups = [
 	{ slug: "docker", title: "Docker", order: 20 },
