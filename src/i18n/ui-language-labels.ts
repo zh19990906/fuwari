@@ -9,6 +9,9 @@ export const UiLabelKey = {
 	lightDarkMode: "ui.lightDarkMode",
 	switchToChinese: "ui.switchToChinese",
 	switchToEnglish: "ui.switchToEnglish",
+	docs: "ui.docs",
+	documentation: "ui.documentation",
+	backToDocs: "ui.backToDocs",
 } as const;
 
 export type UiLabelKeyValue = (typeof UiLabelKey)[keyof typeof UiLabelKey];
@@ -26,6 +29,9 @@ export const uiLanguageLabels: Record<
 		[UiLabelKey.lightDarkMode]: "明暗模式",
 		[UiLabelKey.switchToChinese]: "切换为中文",
 		[UiLabelKey.switchToEnglish]: "切换为英文",
+		[UiLabelKey.docs]: "文档",
+		[UiLabelKey.documentation]: "文档系列",
+		[UiLabelKey.backToDocs]: "返回文档",
 	},
 	en: {
 		[UiLabelKey.language]: "Page language",
@@ -36,5 +42,8 @@ export const uiLanguageLabels: Record<
 		[UiLabelKey.lightDarkMode]: "Light and dark mode",
 		[UiLabelKey.switchToChinese]: "Switch to Chinese",
 		[UiLabelKey.switchToEnglish]: "Switch to English",
+		[UiLabelKey.docs]: "Docs",
+		[UiLabelKey.documentation]: "Documentation",
+		[UiLabelKey.backToDocs]: "Back to docs",
 	},
 };
