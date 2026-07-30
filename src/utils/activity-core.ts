@@ -44,7 +44,9 @@ function formatShanghaiDateKey(value: Date | string): string {
 		month: "2-digit",
 		day: "2-digit",
 	}).formatToParts(date);
-	const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+	const values = Object.fromEntries(
+		parts.map((part) => [part.type, part.value]),
+	);
 	return `${values.year}-${values.month}-${values.day}`;
 }
 
@@ -56,7 +58,8 @@ function shiftDateKey(dateKey: string, days: number): string {
 
 export function cleanActivityTitle(subject: string, body: string): string {
 	const normalizedSubject = subject.trim();
-	if (!genericPullRequestMerge.test(normalizedSubject)) return normalizedSubject;
+	if (!genericPullRequestMerge.test(normalizedSubject))
+		return normalizedSubject;
 	const firstMeaningfulBodyLine = body
 		.split(/\r?\n/)
 		.map((line) => line.trim())
@@ -69,7 +72,10 @@ export function classifyActivity(
 	isMerge: boolean,
 ): ActivityKind {
 	if (isMerge) return "release";
-	const prefix = subject.trim().match(/^([a-z-]+)(?:\([^)]*\))?:/i)?.[1]?.toLowerCase();
+	const prefix = subject
+		.trim()
+		.match(/^([a-z-]+)(?:\([^)]*\))?:/i)?.[1]
+		?.toLowerCase();
 	switch (prefix) {
 		case "content":
 			return "content";
@@ -105,10 +111,17 @@ export function parseGitLog(raw: string): ActivityCommit[] {
 		.map((record) => record.trim())
 		.filter(Boolean)
 		.map((record) => {
-			const [hash = "", parentsText = "", committedAt = "", subject = "", ...bodyParts] =
-				record.split("\x1f");
+			const [
+				hash = "",
+				parentsText = "",
+				committedAt = "",
+				subject = "",
+				...bodyParts
+			] = record.split("\x1f");
 			const body = bodyParts.join("\x1f");
-			const parents = parentsText.trim() ? parentsText.trim().split(/\s+/) : [];
+			const parents = parentsText.trim()
+				? parentsText.trim().split(/\s+/)
+				: [];
 			const isMerge = parents.length > 1;
 			return {
 				hash: hash.trim(),
@@ -130,7 +143,8 @@ export function buildActivitySummary(
 ): ActivitySummary {
 	const sorted = [...commits].sort(
 		(left, right) =>
-			new Date(right.committedAt).getTime() - new Date(left.committedAt).getTime(),
+			new Date(right.committedAt).getTime() -
+			new Date(left.committedAt).getTime(),
 	);
 	const todayKey = formatShanghaiDateKey(now);
 	const last7DayKeys = new Set(
@@ -138,7 +152,10 @@ export function buildActivitySummary(
 	);
 	const countsByDate = new Map<string, number>();
 	for (const commit of sorted) {
-		countsByDate.set(commit.dateKey, (countsByDate.get(commit.dateKey) || 0) + 1);
+		countsByDate.set(
+			commit.dateKey,
+			(countsByDate.get(commit.dateKey) || 0) + 1,
+		);
 	}
 	const heatmap = Array.from({ length: 90 }, (_, index) => {
 		const date = shiftDateKey(todayKey, index - 89);
@@ -153,7 +170,9 @@ export function buildActivitySummary(
 		todayReleases: sorted.filter(
 			(commit) => commit.dateKey === todayKey && commit.isMerge,
 		).length,
-		last7DaysCommits: sorted.filter((commit) => last7DayKeys.has(commit.dateKey)).length,
+		last7DaysCommits: sorted.filter((commit) =>
+			last7DayKeys.has(commit.dateKey),
+		).length,
 		lastUpdatedAt: sorted[0]?.committedAt,
 		heatmap,
 		commits: sorted.slice(0, 200),
