@@ -4,6 +4,7 @@ import {
 	buildActivitySummary,
 	classifyActivity,
 	cleanActivityTitle,
+	isActivitySummaryFresh,
 	loadActivitySummary,
 	parseGitLog,
 } from "../.test-dist/src/utils/activity-core.js";
@@ -116,6 +117,22 @@ test("sorts newest first and limits the detailed timeline to 200 commits", () =>
 	assert.equal(summary.commits.length, 200);
 	assert.equal(summary.commits[0].displayTitle, "chore: 204");
 	assert.equal(summary.commits.at(-1).displayTitle, "chore: 5");
+});
+
+test("marks a generated activity summary stale after the Shanghai date changes", () => {
+	const generatedAt = "2026-08-02T17:00:00Z";
+	assert.equal(
+		isActivitySummaryFresh(generatedAt, new Date("2026-08-03T15:59:59Z")),
+		true,
+	);
+	assert.equal(
+		isActivitySummaryFresh(generatedAt, new Date("2026-08-03T16:00:00Z")),
+		false,
+	);
+	assert.equal(
+		isActivitySummaryFresh("not-a-date", new Date("2026-08-03T15:00:00Z")),
+		false,
+	);
 });
 
 test("returns an explicit unavailable summary when git history cannot be read", async () => {

@@ -72,6 +72,25 @@ test("activity page and sidebar use the real build-time activity summary", async
 	assert.match(sidebar, /<ActivityCard/);
 });
 
+test("activity counters use main history and expire when the static build crosses a day", async () => {
+	const [adapter, page, card, deploy] = await Promise.all([
+		read("src/utils/activity-utils.ts"),
+		read("src/pages/activity/index.astro"),
+		read("src/components/widget/ActivityCard.astro"),
+		read(".github/workflows/deploy.yml"),
+	]);
+	assert.match(adapter, /"--first-parent"/);
+	assert.match(deploy, /schedule:\s*\n\s*- cron: "15 16 \* \* \*"/);
+	for (const source of [page, card]) {
+		assert.match(source, /data-activity-summary/);
+		assert.match(source, /data-generated-at=\{summary\.generatedAt\}/);
+		assert.match(source, /data-today-activity-count/);
+		assert.match(source, /data-activity-stale/);
+	}
+	assert.match(card, /isActivitySummaryFresh/);
+	assert.match(card, /textContent = "0"/);
+});
+
 test("activity navigation and runtime labels are registered", async () => {
 	const [types, presets, config, labels, about] = await Promise.all([
 		read("src/types/config.ts"),
@@ -95,6 +114,10 @@ test("activity navigation and runtime labels are registered", async () => {
 		"Releases today",
 		"最近 7 天",
 		"Last 7 days",
+		"统计截至",
+		"Statistics as of",
+		"数据待刷新",
+		"Data refresh pending",
 		"暂无活动数据",
 		"Activity data unavailable",
 	]) {

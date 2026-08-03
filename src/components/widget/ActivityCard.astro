@@ -16,9 +16,21 @@ const latestTime = summary.lastUpdatedAt
 			hour12: false,
 		}).format(new Date(summary.lastUpdatedAt))
 	: undefined;
+const generatedTime = new Intl.DateTimeFormat("zh-CN", {
+	timeZone: summary.timezone,
+	month: "2-digit",
+	day: "2-digit",
+	hour: "2-digit",
+	minute: "2-digit",
+	hour12: false,
+}).format(new Date(summary.generatedAt));
 ---
 
-<div class="card-base p-4 onload-animation">
+<div
+	class="card-base p-4 onload-animation"
+	data-activity-summary
+	data-generated-at={summary.generatedAt}
+>
 	<div class="flex items-center gap-2 mb-3">
 		<Icon name="material-symbols:history-rounded" class="text-xl text-[var(--primary)]" />
 		<h2 class="font-bold text-90" data-i18n-key={UiLabelKey.developmentActivity}>
@@ -28,15 +40,15 @@ const latestTime = summary.lastUpdatedAt
 
 	{summary.available ? (
 		<>
-			<div class="grid grid-cols-3 gap-2 mb-3 text-center">
+			<div class="grid grid-cols-3 gap-2 mb-2 text-center">
 				<div class="rounded-xl bg-black/5 dark:bg-white/5 px-2 py-2">
-					<div class="font-bold text-lg text-90">{summary.todayCommits}</div>
+					<div data-today-activity-count class="font-bold text-lg text-90">{summary.todayCommits}</div>
 					<div class="text-[0.7rem] text-50" data-i18n-key={UiLabelKey.todayCommits}>
 						{uiLanguageLabels.zh_CN[UiLabelKey.todayCommits]}
 					</div>
 				</div>
 				<div class="rounded-xl bg-black/5 dark:bg-white/5 px-2 py-2">
-					<div class="font-bold text-lg text-90">{summary.todayReleases}</div>
+					<div data-today-activity-count class="font-bold text-lg text-90">{summary.todayReleases}</div>
 					<div class="text-[0.7rem] text-50" data-i18n-key={UiLabelKey.todayReleases}>
 						{uiLanguageLabels.zh_CN[UiLabelKey.todayReleases]}
 					</div>
@@ -48,6 +60,18 @@ const latestTime = summary.lastUpdatedAt
 					</div>
 				</div>
 			</div>
+			<p class="mb-3 flex flex-wrap items-center gap-x-1 text-[0.7rem] text-40">
+				<span data-i18n-key={UiLabelKey.statisticsAsOf}>
+					{uiLanguageLabels.zh_CN[UiLabelKey.statisticsAsOf]}
+				</span>
+				<time datetime={summary.generatedAt}>{generatedTime}</time>
+				<span data-activity-stale class="hidden font-medium text-[var(--primary)]">
+					<span aria-hidden="true">·</span>
+					<span data-i18n-key={UiLabelKey.activityPendingRefresh}>
+						{uiLanguageLabels.zh_CN[UiLabelKey.activityPendingRefresh]}
+					</span>
+				</span>
+			</p>
 			{latest && (
 				<div class="rounded-xl border border-[var(--line-divider)] px-3 py-2 mb-3">
 					<div class="text-xs text-40 mb-1 flex justify-between gap-2">
@@ -73,3 +97,32 @@ const latestTime = summary.lastUpdatedAt
 		<Icon name="material-symbols:arrow-forward-rounded" />
 	</a>
 </div>
+
+<script>
+	import { isActivitySummaryFresh } from "@utils/activity-core";
+
+	function syncActivityFreshness(): void {
+		document
+			.querySelectorAll<HTMLElement>("[data-activity-summary]")
+			.forEach((element) => {
+				const generatedAt = element.dataset.generatedAt;
+				const isFresh = generatedAt
+					? isActivitySummaryFresh(generatedAt)
+					: false;
+				if (!isFresh) {
+					element
+						.querySelectorAll<HTMLElement>("[data-today-activity-count]")
+						.forEach((counter) => {
+							counter.textContent = "0";
+						});
+				}
+				element
+					.querySelectorAll<HTMLElement>("[data-activity-stale]")
+					.forEach((notice) => notice.classList.toggle("hidden", isFresh));
+			});
+	}
+
+	syncActivityFreshness();
+	document.addEventListener("astro:page-load", syncActivityFreshness);
+	document.addEventListener("swup:contentReplaced", syncActivityFreshness);
+</script>

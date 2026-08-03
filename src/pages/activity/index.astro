@@ -17,6 +17,14 @@ const groupedCommits = recentCommits.reduce<
 
 const timelineGroups = Object.entries(groupedCommits);
 const maxHeatmapCount = Math.max(1, ...summary.heatmap.map((day) => day.count));
+const generatedTime = new Intl.DateTimeFormat("zh-CN", {
+	timeZone: summary.timezone,
+	month: "2-digit",
+	day: "2-digit",
+	hour: "2-digit",
+	minute: "2-digit",
+	hour12: false,
+}).format(new Date(summary.generatedAt));
 
 function heatmapClass(count: number): string {
 	if (count === 0) return "bg-black/5 dark:bg-white/10";
@@ -57,28 +65,46 @@ function kindLabel(kind: string): string {
 	titleKey={UiLabelKey.activity}
 	description={uiLanguageLabels.zh_CN[UiLabelKey.activityIntro]}
 >
-	<div class="card-base px-6 md:px-8 py-7 mb-4">
+	<div
+		class="card-base px-6 md:px-8 py-7 mb-4"
+		data-activity-summary
+		data-generated-at={summary.generatedAt}
+	>
 		<div class="flex items-center gap-3 mb-3">
 			<Icon name="material-symbols:history-rounded" class="text-3xl text-[var(--primary)]" />
 			<h1 class="text-2xl font-bold" data-i18n-key={UiLabelKey.developmentActivity}>
 				{uiLanguageLabels.zh_CN[UiLabelKey.developmentActivity]}
 			</h1>
 		</div>
-		<p class="text-50 leading-7 mb-6" data-i18n-key={UiLabelKey.activityIntro}>
+		<p class="text-50 leading-7 mb-3" data-i18n-key={UiLabelKey.activityIntro}>
 			{uiLanguageLabels.zh_CN[UiLabelKey.activityIntro]}
 		</p>
+		{summary.available && (
+			<p class="mb-6 flex flex-wrap items-center gap-x-1 text-sm text-40">
+				<span data-i18n-key={UiLabelKey.statisticsAsOf}>
+					{uiLanguageLabels.zh_CN[UiLabelKey.statisticsAsOf]}
+				</span>
+				<time datetime={summary.generatedAt}>{generatedTime}</time>
+				<span data-activity-stale class="hidden font-medium text-[var(--primary)]">
+					<span aria-hidden="true">·</span>
+					<span data-i18n-key={UiLabelKey.activityPendingRefresh}>
+						{uiLanguageLabels.zh_CN[UiLabelKey.activityPendingRefresh]}
+					</span>
+				</span>
+			</p>
+		)}
 
 		{summary.available ? (
 			<>
 				<div class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-7">
 					<div class="rounded-2xl bg-black/5 dark:bg-white/5 p-4">
-						<div class="text-3xl font-bold text-90">{summary.todayCommits}</div>
+						<div data-today-activity-count class="text-3xl font-bold text-90">{summary.todayCommits}</div>
 						<div class="mt-1 text-sm text-50" data-i18n-key={UiLabelKey.todayCommits}>
 							{uiLanguageLabels.zh_CN[UiLabelKey.todayCommits]}
 						</div>
 					</div>
 					<div class="rounded-2xl bg-black/5 dark:bg-white/5 p-4">
-						<div class="text-3xl font-bold text-90">{summary.todayReleases}</div>
+						<div data-today-activity-count class="text-3xl font-bold text-90">{summary.todayReleases}</div>
 						<div class="mt-1 text-sm text-50" data-i18n-key={UiLabelKey.todayReleases}>
 							{uiLanguageLabels.zh_CN[UiLabelKey.todayReleases]}
 						</div>
