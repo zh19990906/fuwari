@@ -58,10 +58,7 @@ export function isActivitySummaryFresh(
 ): boolean {
 	const generatedDate =
 		generatedAt instanceof Date ? generatedAt : new Date(generatedAt);
-	if (
-		Number.isNaN(generatedDate.getTime()) ||
-		Number.isNaN(now.getTime())
-	) {
+	if (Number.isNaN(generatedDate.getTime()) || Number.isNaN(now.getTime())) {
 		return false;
 	}
 	return formatShanghaiDateKey(generatedDate) === formatShanghaiDateKey(now);
