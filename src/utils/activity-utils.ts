@@ -8,6 +8,7 @@ async function readGitLog(): Promise<string> {
 			[
 				"log",
 				"HEAD",
+				"--first-parent",
 				"--since=180 days ago",
 				"--date=iso-strict",
 				"--pretty=format:%H%x1f%P%x1f%cI%x1f%s%x1f%b%x1e",
