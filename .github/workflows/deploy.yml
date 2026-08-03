@@ -4,7 +4,6 @@ on:
   push:
     branches: [main]
   schedule:
-    # 00:15 every day in Asia/Shanghai (UTC+8)
     - cron: "15 16 * * *"
   workflow_dispatch:
 
