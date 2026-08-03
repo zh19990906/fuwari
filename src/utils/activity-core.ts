@@ -52,6 +52,21 @@ function formatShanghaiDateKey(value: Date | string): string {
 	return `${values.year}-${values.month}-${values.day}`;
 }
 
+export function isActivitySummaryFresh(
+	generatedAt: Date | string,
+	now = new Date(),
+): boolean {
+	const generatedDate =
+		generatedAt instanceof Date ? generatedAt : new Date(generatedAt);
+	if (
+		Number.isNaN(generatedDate.getTime()) ||
+		Number.isNaN(now.getTime())
+	) {
+		return false;
+	}
+	return formatShanghaiDateKey(generatedDate) === formatShanghaiDateKey(now);
+}
+
 function shiftDateKey(dateKey: string, days: number): string {
 	const date = new Date(`${dateKey}T00:00:00Z`);
 	date.setUTCDate(date.getUTCDate() + days);
