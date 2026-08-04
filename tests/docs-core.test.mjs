@@ -8,6 +8,7 @@ import {
 	validateDocsConfiguration,
 } from "../.test-dist/src/utils/docs-core.js";
 import "./content-migration.test.mjs";
+import "./engineering-docs.test.mjs";
 import "./frp-doc.test.mjs";
 import "./yolo-crowdhuman-doc.test.mjs";
 import "./yuque-agent-docs.test.mjs";
