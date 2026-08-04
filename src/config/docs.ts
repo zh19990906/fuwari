@@ -43,4 +43,10 @@ export const docsGroups: DocGroupConfig[] = [
 		description: "NLP、注意力机制、Transformer 与大语言模型基础",
 		order: 70,
 	},
+	{
+		slug: "devops",
+		title: "DevOps",
+		description: "版本控制、CI/CD、发布、可观测性与自动化实践",
+		order: 80,
+	},
 ];
