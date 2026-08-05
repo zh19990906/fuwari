@@ -11,6 +11,7 @@ import "./content-migration.test.mjs";
 import "./engineering-docs.test.mjs";
 import "./frp-doc.test.mjs";
 import "./yolo-crowdhuman-doc.test.mjs";
+import "./yolo-gimbal-docs.test.mjs";
 import "./yuque-agent-docs.test.mjs";
 import "./yuque-python-service-docs.test.mjs";
 
