@@ -49,4 +49,10 @@ export const docsGroups: DocGroupConfig[] = [
 		description: "版本控制、CI/CD、发布、可观测性与自动化实践",
 		order: 80,
 	},
+	{
+		slug: "yolo-gimbal",
+		title: "YOLO 云台项目",
+		description: "双机视觉跟踪、NanoPi K2、PCA9685、舵机控制与系统排障记录",
+		order: 90,
+	},
 ];
